@@ -39,21 +39,16 @@ class SeismicClient {
             tx: stringifyBigInts(tx),
             signature: stringifyBigInts(signature),
     });
-
-    return response.data;
-
+    if (response.data.message === "No market at home location") {
+        return undefined;
+    }
+    else {
+        return response.data;
+    }
     } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-        if (error.response.status === 404) {
-            if (error.response.data === "No market at home location") {
-                return undefined;
-            }
-        } else {
             throw new Error(`HTTP error! status: ${error.response.status}`);
         }
-    } else {
-        throw error; 
-    }
     }
   }
 }
