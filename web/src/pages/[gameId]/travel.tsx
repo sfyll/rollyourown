@@ -96,6 +96,7 @@ export default function Travel() {
         return {
           id: drug.id,
           price: drug.price,
+          hiding_price: drug.marketPool.quantity.toString().slice(0,5),
         } as MarketPriceInfo;
       });
     }
