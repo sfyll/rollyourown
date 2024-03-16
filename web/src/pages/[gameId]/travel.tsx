@@ -247,7 +247,7 @@ export default function Travel() {
   );
 }
 
-const LocationPrices = ({ prices, isCurrentLocation, currentLocationId }: { prices: MarketPriceInfo[]; isCurrentLocation?: boolean ; locationName?: string}) => {
+const LocationPrices = ({ prices, isCurrentLocation, currentLocationId }: { prices: MarketPriceInfo[]; isCurrentLocation?: boolean ; currentLocationId?: string}) => {
   const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();
 
   return (
