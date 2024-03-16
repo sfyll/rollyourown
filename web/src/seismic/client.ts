@@ -1,7 +1,7 @@
 import { Account, WeierstrassSignatureType } from "starknet";
 import { getNonce, stringifyBigInts} from "./lib/utils"; 
 import { signTypedDataStarknet } from "./lib/signature"; 
-import { tradeParametersActionDomain, tradeParametersActionTypeLabel, tradeParametersActionTypes } from "./lib/eip712.types";
+import { tradeActionDomain, tradeActionTypeLabel, tradeActionTypes, tradeParametersActionDomain, tradeParametersActionTypeLabel, tradeParametersActionTypes } from "./lib/eip712.types";
 import axios from "axios";
 
 class SeismicClient {
@@ -51,7 +51,39 @@ class SeismicClient {
         }
     }
   }
-}
 
+  async getDataAvailabilitySignature(game_id: string,  drug_id: string) { 
+    let senderNonce = await getNonce(this.account, this.seismic_url);
+
+    const tx = {
+      nonce: BigInt(senderNonce).toString(),
+      player_id: this.account.address,
+      game_id: game_id.toString(),
+      drug_id: drug_id.toString(),
+    };
+
+    const signature = await signTypedDataStarknet(
+      this.account,
+      tradeActionTypes,
+      tradeActionTypeLabel,
+      tradeActionDomain,
+      tx
+    ) as WeierstrassSignatureType;
+    
+    try {
+        const response = await axios.post(`${this.seismic_url}/trade/tradeDavail`, {
+            tx: stringifyBigInts(tx),
+            signature: stringifyBigInts(signature),
+    });
+    return response
+    } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+        console.log("error status: ", error.response)
+            throw new Error(`HTTP error! status: ${error.response.status}`);
+        }
+    }
+
+ }
+}
 
 export default SeismicClient;
