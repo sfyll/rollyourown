@@ -16,7 +16,7 @@ export interface EIP712Types {
 }
 
 export const EIP712DomainSpecStarknet = [
-    { name: "name", type: "string" },
+    { name: "name", type: "felt" },
     { name: "version", type: "felt" },
     { name: "chainId", type: "felt" },
 ];
@@ -42,7 +42,7 @@ export function createStarknetEIP712DomainType(name: string) {
     return { 
         name,
         version: process.env.VERSION || 1,
-        chainId: typeof process.env.CHAIN_ID === 'string' ? shortString.encodeShortString(process.env.CHAIN_ID) : Number(process.env.CHAIN_ID) || shortString.encodeShortString("KATANA") as number,
+        chainId: typeof process.env.CHAIN_ID === 'string' ? shortString.encodeShortString(process.env.CHAIN_ID) : Number(process.env.CHAIN_ID) || shortString.encodeShortString("KATANA"),
     };
 }
 
