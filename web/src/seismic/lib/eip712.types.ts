@@ -14,15 +14,17 @@ export const TradeParametersTypes = [
 
 export const tradeParametersActionTypeLabel = "TradeParameters";
 export const tradeParametersActionTypes = createEIP712TypesNoBodyStarknet(tradeParametersActionTypeLabel, TradeParametersTypes);
-export const tradeParametersActionDomain = createStarknetEIP712DomainType("Trade Parameters Request");
+export const tradeParametersActionDomain = createStarknetEIP712DomainType("SeismicRyo");
 
 export const TradeTypes = [
     nonceType,
     { name: "player_id", type: "felt" },
     { name: "game_id", type: "felt" },
     { name: "drug_id", type: "felt" },
+    { name: "new_cash", type: "felt" },
+    { name: "new_quantity", type: "felt" },
 ]
 
 export const tradeActionTypeLabel = "Trade";
 export const tradeActionTypes = createEIP712TypesNoBodyStarknet(tradeActionTypeLabel, TradeTypes);
-export const tradeActionDomain = createStarknetEIP712DomainType("Trade Request");
+export const tradeActionDomain = createStarknetEIP712DomainType("SeismicRyo");
