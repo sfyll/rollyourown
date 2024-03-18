@@ -79,7 +79,7 @@ class SeismicClient {
 
   async getDataAvailabilitySignature(game_id: string,  drug_id: string, new_cash: number, new_quantity: number): Promise<TradeResponse> {
     
-    const senderNonce = await getNonce(this.account, this.seismic_url)
+    const senderNonce = await getNonce(this.account, this.seismic_url);
 
     const tx = {
       nonce: BigInt(senderNonce).toString(),
@@ -97,14 +97,12 @@ class SeismicClient {
       tradeActionDomain,
       tx
     ) as WeierstrassSignatureType;
- 
+    
     try {
         const response = await axios.post(`${this.seismic_url}/trade/tradeDavail`, {
             tx: stringifyBigInts(tx),
             signature: stringifyBigInts(signature),
     });
-
-    console.log(response)
 
     return convertToBigInt(response.data)
     } catch (error) {
