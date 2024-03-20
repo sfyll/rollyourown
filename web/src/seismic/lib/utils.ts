@@ -1,5 +1,6 @@
 import { Account } from "starknet";
 import axios from "axios";
+import { poseidonHashMany } from "@scure/starknet";
 
 /*
  * Seismic tracks a nonce for each wallet to avoid replay attacks. Note this is
@@ -44,4 +45,8 @@ export function stringifyBigInts(obj: any): any {
         newObj[key] = stringifyBigInts(newObj[key]);
     }
     return newObj;
+}
+
+export function getUniquePoseidonHash(value: string) {
+        return poseidonHashMany([BigInt(value)])
 }
