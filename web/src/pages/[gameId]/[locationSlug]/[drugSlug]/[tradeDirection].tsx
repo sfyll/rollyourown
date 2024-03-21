@@ -21,6 +21,7 @@ import { TradeResponse } from "@/seismic/lib/response.types";
 import { getUniquePoseidonHash } from "@/seismic/lib/utils";
 import Trade from "@/seismic/zkp/models/trade";
 import { TradeSide } from "@/seismic/zkp/types/TradeSide";
+import { createAndVerifyProof } from "@/seismic/zkp/models/zkp";
 
 
 export default function Market() {
@@ -83,6 +84,7 @@ export default function Market() {
         const seismic_smart_contract = await seismic.getSeismicSmartContractAddress();
         const cashHash = getUniquePoseidonHash(trade.getNewReserveIn().toString());
         const quantityHash = getUniquePoseidonHash(trade.getNewReserveOut().toString());
+        await createAndVerifyProof(trade.getZkpParams());
         ({ hash } = await buy(gameId, location!.type, drug!.type, quantityBuy, 
         cashHash, quantityHash,
         trade.amountIn ,seismic_smart_contract, seismic_trade_parameters.commitment, seismic_trade_parameters.signature));
@@ -98,7 +100,7 @@ export default function Market() {
         const seismic_smart_contract = await seismic.getSeismicSmartContractAddress();
         const cashHash = getUniquePoseidonHash(trade.getNewReserveOut().toString());
         const quantityHash = getUniquePoseidonHash(trade.getNewReserveIn().toString());
-
+        await createAndVerifyProof(trade.getZkpParams());
         ({ hash } = await sell(gameId, location!.type, drug!.type, quantitySell, 
         cashHash, quantityHash,
         trade.amountOut, seismic_smart_contract, seismic_trade_parameters.commitment, seismic_trade_parameters.signature));

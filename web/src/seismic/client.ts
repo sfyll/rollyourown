@@ -64,18 +64,18 @@ class SeismicClient {
             tx: stringifyBigInts(tx),
             signature: stringifyBigInts(signature),
     });
-    if (response.data.message === "No market at home location") {
-        return undefined;
-    }
-    else {
-        return response.data;
-    }
+    return response.data;
     } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-            throw new Error(`HTTP error! status: ${error.response.status}`);
+        if (error.response.status === 406) {
+            return undefined;
+        }
+        else {
+        throw new Error(`HTTP error! status: ${error.response.status}`);
         }
     }
   }
+}
 
   async getDataAvailabilitySignature(game_id: string,  drug_id: string, new_cash: bigint, new_quantity: bigint): Promise<TradeResponse> {
     

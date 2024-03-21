@@ -49,6 +49,7 @@ import {
 } from "@/components/icons/items";
 import { Siren, Truck } from "@/components/icons";
 import { ToastType } from "@/hooks/toast";
+import { DrugMarketBlinded } from "./queries/useMarkets";
 
 export const locations: LocationInfo[] = [
   {
@@ -464,7 +465,7 @@ export function getOutcomeInfo(
   return found || outcomes[0];
 }
 
-export function sortDrugMarkets(drugMarkets?: DrugMarket[]): DrugMarket[] {
+export function sortDrugMarkets(drugMarkets?: DrugMarketBlinded[]): DrugMarketBlinded[] {
   if (!drugMarkets) {
     return [];
   }
