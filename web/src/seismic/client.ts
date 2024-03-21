@@ -77,7 +77,7 @@ class SeismicClient {
     }
   }
 
-  async getDataAvailabilitySignature(game_id: string,  drug_id: string, new_cash: number, new_quantity: number): Promise<TradeResponse> {
+  async getDataAvailabilitySignature(game_id: string,  drug_id: string, new_cash: bigint, new_quantity: bigint): Promise<TradeResponse> {
     
     const senderNonce = await getNonce(this.account, this.seismic_url);
 

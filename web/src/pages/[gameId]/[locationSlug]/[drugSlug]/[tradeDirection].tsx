@@ -19,6 +19,9 @@ import { DrugInfo, DrugMarket } from "@/dojo/types";
 import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { TradeResponse } from "@/seismic/lib/response.types";
 import { getUniquePoseidonHash } from "@/seismic/lib/utils";
+import Trade from "@/seismic/zkp/models/trade";
+import { TradeSide } from "@/seismic/zkp/types/TradeSide";
+
 
 export default function Market() {
   const router = useRouter();
@@ -71,33 +74,34 @@ export default function Market() {
       quantity,
       total;
 
+    //Note: In the below, market!.marketPool doesn't refresh if perfoming multiple buys/sells
     try {
       if (tradeDirection === TradeDirection.Buy) {
-        const poolParamterers = calculateNewMarketValuesAndDeltas(market!.marketPool, quantityBuy!, tradeDirection);
+        const trade =  await Trade.getTrade(BigInt(market!.marketPool.cash), BigInt(market!.marketPool.quantity), BigInt(quantityBuy!), TradeSide.BUY)
         const seismic_trade_parameters: TradeResponse = await seismic.getDataAvailabilitySignature(gameId, drug!.id, 
-         poolParamterers.newMarket.cash, poolParamterers.newMarket.quantity)
+         trade.getNewReserveIn(), trade.getNewReserveOut())
         const seismic_smart_contract = await seismic.getSeismicSmartContractAddress();
-        const cashHash = getUniquePoseidonHash(poolParamterers.newMarket.cash.toString())
-        const quantityHash = getUniquePoseidonHash(poolParamterers.newMarket.quantity.toString())
+        const cashHash = getUniquePoseidonHash(trade.getNewReserveIn().toString());
+        const quantityHash = getUniquePoseidonHash(trade.getNewReserveOut().toString());
         ({ hash } = await buy(gameId, location!.type, drug!.type, quantityBuy, 
         cashHash, quantityHash,
-        poolParamterers.cashDelta,seismic_smart_contract, seismic_trade_parameters.commitment, seismic_trade_parameters.signature));
+        trade.amountIn ,seismic_smart_contract, seismic_trade_parameters.commitment, seismic_trade_parameters.signature));
         toastMessage = `You bought ${quantityBuy} ${drug!.name}`;
         quantity = quantityBuy;
 
         const slippage = calculateSlippage(market!.marketPool, quantity, tradeDirection);
         total = slippage.newPrice * quantity;
       } else if (tradeDirection === TradeDirection.Sell) {
-         const poolParamterers = calculateNewMarketValuesAndDeltas(market!.marketPool, quantitySell!, tradeDirection);
+        const trade =  await Trade.getTrade(BigInt(market!.marketPool.quantity), BigInt(market!.marketPool.cash), BigInt(quantitySell!), TradeSide.SELL)
         const seismic_trade_parameters: TradeResponse = await seismic.getDataAvailabilitySignature(gameId, drug!.id, 
-         poolParamterers.newMarket.cash, poolParamterers.newMarket.quantity)
+        trade.getNewReserveOut(), trade.getNewReserveIn())
         const seismic_smart_contract = await seismic.getSeismicSmartContractAddress();
-        const cashHash = getUniquePoseidonHash(poolParamterers.newMarket.cash.toString());
-        const quantityHash = getUniquePoseidonHash(poolParamterers.newMarket.quantity.toString());
+        const cashHash = getUniquePoseidonHash(trade.getNewReserveOut().toString());
+        const quantityHash = getUniquePoseidonHash(trade.getNewReserveIn().toString());
 
         ({ hash } = await sell(gameId, location!.type, drug!.type, quantitySell, 
         cashHash, quantityHash,
-        poolParamterers.cashDelta,seismic_smart_contract, seismic_trade_parameters.commitment, seismic_trade_parameters.signature));
+        trade.amountOut, seismic_smart_contract, seismic_trade_parameters.commitment, seismic_trade_parameters.signature));
 
         toastMessage = `You sold ${quantitySell} ${drug!.name}`;
         quantity = quantitySell;
