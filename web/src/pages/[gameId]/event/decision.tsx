@@ -254,10 +254,11 @@ export default function Decision() {
           sentence={sentence}
           encounter={encounter!}
           playerEntity={playerEntity}
-          imageSrc={`/images/events/${status == PlayerStatus.BeingMugged ? 
-            `muggers${encounter!.level <= 3 ? encounter!.level : 3}.gif` : 
-            `cops${encounter!.level <= 3 ? encounter!.level : 3}.gif`
-            }`}
+          imageSrc={`/images/events/${
+            status == PlayerStatus.BeingMugged
+              ? `muggers${encounter!.level <= 3 ? encounter!.level : 3}.gif`
+              : `cops${encounter!.level <= 3 ? encounter!.level : 3}.gif`
+          }`}
           flex={[0, 1]}
           mb={0}
           w="full"
@@ -307,7 +308,7 @@ export default function Decision() {
           <Footer position={["fixed", "absolute"]} p={["8px !important", "0"]}>
             <Button
               w="full"
-              px={["auto","20px"]}
+              px={["auto", "20px"]}
               isDisabled={isRunning || isPaying}
               isLoading={isFigthing}
               onClick={() => {
@@ -320,7 +321,7 @@ export default function Decision() {
 
             <Button
               w="full"
-              px={["auto","20px"]}
+              px={["auto", "20px"]}
               isDisabled={isPaying || isFigthing}
               isLoading={isRunning}
               onClick={() => {
@@ -332,7 +333,7 @@ export default function Decision() {
             </Button>
             <Button
               w="full"
-              px={["auto","20px"]}
+              px={["auto", "20px"]}
               isDisabled={isRunning || isFigthing}
               isLoading={isPaying}
               onClick={() => {

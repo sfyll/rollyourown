@@ -18,19 +18,18 @@ export class PlayerLogs {
 
   constructor(logs: World__EventEdge[]) {
     this.logs = logs || [];
-    this.parsedLogs = this.logs
-      .map((e: World__EventEdge) => {
-        const id = e.node!.id!.split(":");
-        return {
-          idx : Number(id[0]) * 1_000 + Number(id[2]),
-          blocknumber: Number(id[0]),
-          event_idx: Number(id[2]),
-          log: e,
-          parsed: parseEvent(e.node),
-        };
-      })
-      //.sort((a,b) => a.idx - b.idx)
-      //.reverse();
+    this.parsedLogs = this.logs.map((e: World__EventEdge) => {
+      const id = e.node!.id!.split(":");
+      return {
+        idx: Number(id[0]) * 1_000 + Number(id[2]),
+        blocknumber: Number(id[0]),
+        event_idx: Number(id[2]),
+        log: e,
+        parsed: parseEvent(e.node),
+      };
+    });
+    //.sort((a,b) => a.idx - b.idx)
+    //.reverse();
   }
 
   static create(edges: World__EventEdge[]): PlayerLogs | undefined {

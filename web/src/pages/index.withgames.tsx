@@ -1,11 +1,4 @@
-import {
-  Text,
-  VStack,
-  HStack,
-  Divider,
-  Card,
-  CardBody,
-} from "@chakra-ui/react";
+import { Text, VStack, HStack, Divider, Card, CardBody } from "@chakra-ui/react";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { useRouter } from "next/router";
@@ -61,13 +54,7 @@ export default function Home() {
             max={6}
             onClick={() => router.push("/0xdead")}
           />
-          <Game
-            name="1V1 MAX BET"
-            startTime="15m"
-            joined={1}
-            max={2}
-            onClick={() => router.push("/0xdead")}
-          />
+          <Game name="1V1 MAX BET" startTime="15m" joined={1} max={2} onClick={() => router.push("/0xdead")} />
         </VStack>
       </VStack>
     </Layout>

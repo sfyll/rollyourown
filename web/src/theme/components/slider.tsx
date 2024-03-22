@@ -6,8 +6,7 @@ import { createMultiStyleConfigHelpers, defineStyle } from "@chakra-ui/react";
 
 import { generatePixelBorderPath } from "@/utils/ui";
 
-const { definePartsStyle, defineMultiStyleConfig } =
-  createMultiStyleConfigHelpers(sliderAnatomy.keys);
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(sliderAnatomy.keys);
 
 const baseStyle = definePartsStyle({
   container: {

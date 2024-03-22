@@ -1,21 +1,38 @@
 import { useCallback } from "react";
 import { useDojoContext } from "./useDojoContext";
 import { Action, Drug, GameMode, ShopItemInfo } from "../types";
-import { shortString, GetTransactionReceiptResponse, BigNumberish, SuccessfulTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse, Signature, uint256 } from "starknet";
+import {
+  shortString,
+  GetTransactionReceiptResponse,
+  BigNumberish,
+  SuccessfulTransactionReceiptResponse,
+  RejectedTransactionReceiptResponse,
+  RevertedTransactionReceiptResponse,
+  Signature,
+  uint256,
+} from "starknet";
 import { getEvents } from "@dojoengine/utils";
-import { parseAllEvents, BaseEventData, JoinedEventData, MarketEventData, AdverseEventData, ConsequenceEventData, AtPawnshopEventData } from "../events";
+import {
+  parseAllEvents,
+  BaseEventData,
+  JoinedEventData,
+  MarketEventData,
+  AdverseEventData,
+  ConsequenceEventData,
+  AtPawnshopEventData,
+} from "../events";
 import { WorldEvents } from "../generated/contractEvents";
 import { Location, ItemEnum } from "../types";
 import { useState } from "react";
 import { useToast } from "@/hooks/toast";
-import {  cairo, WeierstrassSignatureType } from "starknet";  
+import { cairo, WeierstrassSignatureType } from "starknet";
 
 export interface SystemsInterface {
   createGame: (
     gameMode: number,
     playerName: string,
     avatarId: number,
-    mainnetAddress: BigNumberish
+    mainnetAddress: BigNumberish,
   ) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Location) => Promise<SystemExecuteResult>;
   endGame: (gameId: string) => Promise<SystemExecuteResult>;
@@ -30,7 +47,7 @@ export interface SystemsInterface {
     cost: BigNumberish,
     seismic_contract_address: BigNumberish,
     commitment: BigNumberish,
-    signature:  WeierstrassSignatureType, 
+    signature: WeierstrassSignatureType,
   ) => Promise<SystemExecuteResult>;
   sell: (
     gameId: string,
@@ -42,22 +59,13 @@ export interface SystemsInterface {
     cost: BigNumberish,
     seismic_contract_address: BigNumberish,
     commitment: BigNumberish,
-    signature:  WeierstrassSignatureType, 
+    signature: WeierstrassSignatureType,
   ) => Promise<SystemExecuteResult>;
   // setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
-  decide: (
-    gameId: string,
-    action: Action,
-  ) => Promise<SystemExecuteResult>;
-  buyItem: (
-    gameId: string, itemId: ItemEnum
-  ) => Promise<SystemExecuteResult>;
-  dropItem: (
-    gameId: string, itemId: ItemEnum
-  ) => Promise<SystemExecuteResult>;
-  skipShop: (
-    gameId: string,
-  ) => Promise<SystemExecuteResult>;
+  decide: (gameId: string, action: Action) => Promise<SystemExecuteResult>;
+  buyItem: (gameId: string, itemId: ItemEnum) => Promise<SystemExecuteResult>;
+  dropItem: (gameId: string, itemId: ItemEnum) => Promise<SystemExecuteResult>;
+  skipShop: (gameId: string) => Promise<SystemExecuteResult>;
 
   failingTx: () => Promise<SystemExecuteResult>;
 
@@ -73,31 +81,24 @@ export interface SystemExecuteResult {
   [key: string]: any;
 }
 
-
 const sleep = (ms: number) => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 const tryBetterErrorMsg = (msg: string): string => {
-
-  const failureReasonIndex = msg.indexOf("Failure reason")
+  const failureReasonIndex = msg.indexOf("Failure reason");
   if (failureReasonIndex > 0) {
-    let betterMsg = msg.substring(failureReasonIndex)
-    const cairoTracebackIndex = betterMsg.indexOf("Cairo traceback")
-    betterMsg = betterMsg.substring(0, cairoTracebackIndex)
-    return betterMsg
+    let betterMsg = msg.substring(failureReasonIndex);
+    const cairoTracebackIndex = betterMsg.indexOf("Cairo traceback");
+    betterMsg = betterMsg.substring(0, cairoTracebackIndex);
+    return betterMsg;
   }
 
   return msg;
-
-}
-
+};
 
 export const useSystems = (): SystemsInterface => {
-  const {
-    account,
-    dojoProvider
-  } = useDojoContext();
+  const { account, dojoProvider } = useDojoContext();
 
   const { toast } = useToast();
 
@@ -115,10 +116,9 @@ export const useSystems = (): SystemsInterface => {
       events: any[];
       parsedEvents: any[];
     }> => {
+      setError(undefined);
+      setIsPending(true);
 
-      setError(undefined)
-      setIsPending(true)
-      
       let tx, receipt;
       try {
         tx = await dojoProvider.execute(account!, contract, system, callData);
@@ -126,38 +126,41 @@ export const useSystems = (): SystemsInterface => {
           retryInterval: 100,
         });
       } catch (e: any) {
-        setIsPending(false)
-        setError(e.toString())
+        setIsPending(false);
+        setError(e.toString());
         toast({
           message: tryBetterErrorMsg(e.toString()),
           duration: 20_000,
-          isError: true
-        })
-        throw Error(e.toString())
+          isError: true,
+        });
+        throw Error(e.toString());
       }
 
-
       if (receipt.status === "REJECTED") {
-        setError("Transaction Rejected")
-        setIsPending(false)
+        setError("Transaction Rejected");
+        setIsPending(false);
         toast({
-          message: tryBetterErrorMsg((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message),
+          message: tryBetterErrorMsg(
+            (receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message,
+          ),
           duration: 20_000,
-          isError: true
-        })
-        throw Error((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message)
+          isError: true,
+        });
+        throw Error((receipt as RejectedTransactionReceiptResponse).transaction_failure_reason.error_message);
       }
 
       if (receipt.execution_status === "REVERTED") {
-        setError("Transaction Reverted")
-        setIsPending(false)
+        setError("Transaction Reverted");
+        setIsPending(false);
 
         toast({
-          message: tryBetterErrorMsg((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted'),
+          message: tryBetterErrorMsg(
+            (receipt as RevertedTransactionReceiptResponse).revert_reason || "Transaction Reverted",
+          ),
           duration: 20_000,
-          isError: true
-        })
-        throw Error((receipt as RevertedTransactionReceiptResponse).revert_reason || 'Transaction Reverted')
+          isError: true,
+        });
+        throw Error((receipt as RevertedTransactionReceiptResponse).revert_reason || "Transaction Reverted");
       }
 
       const events = getEvents(receipt);
@@ -166,7 +169,7 @@ export const useSystems = (): SystemsInterface => {
       //torii too slow indexing...
       await sleep(1_000);
 
-      setIsPending(false)
+      setIsPending(false);
 
       return {
         hash: tx?.transaction_hash,
@@ -174,8 +177,6 @@ export const useSystems = (): SystemsInterface => {
         events,
         parsedEvents,
       };
-
-
     },
     [dojoProvider, account, toast],
   );
@@ -188,9 +189,7 @@ export const useSystems = (): SystemsInterface => {
         [gameMode, shortString.encodeShortString(playerName), avatarId, BigInt(mainnetAddress || 0)],
       );
 
-      const joinedEvent = parsedEvents.find(
-        (e) => e.eventType === WorldEvents.PlayerJoined,
-      ) as JoinedEventData;
+      const joinedEvent = parsedEvents.find((e) => e.eventType === WorldEvents.PlayerJoined) as JoinedEventData;
 
       return {
         hash,
@@ -202,30 +201,22 @@ export const useSystems = (): SystemsInterface => {
 
   const travel = useCallback(
     async (gameId: string, locationId: Location) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::travel::travel",
-        "travel",
-        [gameId, locationId],
-      );
+      const { hash, events, parsedEvents } = await executeAndReceipt("rollyourown::systems::travel::travel", "travel", [
+        gameId,
+        locationId,
+      ]);
 
-      const isGameOver = parsedEvents
-        .find((e) => e.eventType === WorldEvents.GameOver)
+      const isGameOver = parsedEvents.find((e) => e.eventType === WorldEvents.GameOver);
 
-      const adverseEvent = parsedEvents.find(
-        (e) => e.eventType === WorldEvents.AdverseEvent,
-      ) as AdverseEventData
+      const adverseEvent = parsedEvents.find((e) => e.eventType === WorldEvents.AdverseEvent) as AdverseEventData;
 
-      const atPawnshopEvent = parsedEvents.find(
-        (e) => e.eventType === WorldEvents.AtPawnshop,
-      ) as AtPawnshopEventData
+      const atPawnshopEvent = parsedEvents.find((e) => e.eventType === WorldEvents.AtPawnshop) as AtPawnshopEventData;
 
       return {
         hash,
         isGameOver,
         event: adverseEvent || atPawnshopEvent,
-        events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.MarketEvent)
-          .map((e) => e as MarketEventData),
+        events: parsedEvents.filter((e) => e.eventType === WorldEvents.MarketEvent).map((e) => e as MarketEventData),
       };
     },
     [executeAndReceipt],
@@ -246,8 +237,6 @@ export const useSystems = (): SystemsInterface => {
     [executeAndReceipt],
   );
 
-
-
   const buy = useCallback(
     async (
       gameId: string,
@@ -259,14 +248,20 @@ export const useSystems = (): SystemsInterface => {
       cost: BigNumberish,
       seismic_contract_address: BigNumberish,
       commitment: BigNumberish,
-      signature:  WeierstrassSignatureType, 
+      signature: WeierstrassSignatureType,
     ) => {
-
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::trade::trade",
-        "buy",
-        [gameId, locationId, drugId, quantity, cash , total_quantity, cost, seismic_contract_address, commitment, {r:cairo.uint256(signature.r), s:cairo.uint256(signature.s), y_parity:signature.recovery!}],
-      );
+      const { hash, events, parsedEvents } = await executeAndReceipt("rollyourown::systems::trade::trade", "buy", [
+        gameId,
+        locationId,
+        drugId,
+        quantity,
+        cash,
+        total_quantity,
+        cost,
+        seismic_contract_address,
+        commitment,
+        { r: cairo.uint256(signature.r), s: cairo.uint256(signature.s), y_parity: signature.recovery! },
+      ]);
 
       return {
         hash,
@@ -286,13 +281,20 @@ export const useSystems = (): SystemsInterface => {
       cost: BigNumberish,
       seismic_contract_address: BigNumberish,
       commitment: BigNumberish,
-      signature:  WeierstrassSignatureType,
+      signature: WeierstrassSignatureType,
     ) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::trade::trade",
-        "sell",
-        [gameId, locationId, drugId, quantity, cash , total_quantity, cost, seismic_contract_address, commitment, {r:cairo.uint256(signature.r), s:cairo.uint256(signature.s), y_parity:signature.recovery!}],
-      );
+      const { hash, events, parsedEvents } = await executeAndReceipt("rollyourown::systems::trade::trade", "sell", [
+        gameId,
+        locationId,
+        drugId,
+        quantity,
+        cash,
+        total_quantity,
+        cost,
+        seismic_contract_address,
+        commitment,
+        { r: cairo.uint256(signature.r), s: cairo.uint256(signature.s), y_parity: signature.recovery! },
+      ]);
 
       return {
         hash,
@@ -303,28 +305,22 @@ export const useSystems = (): SystemsInterface => {
 
   const decide = useCallback(
     async (gameId: string, action: Action) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::decide::decide",
-        "decide",
-        [gameId, action],
-      );
+      const { hash, events, parsedEvents } = await executeAndReceipt("rollyourown::systems::decide::decide", "decide", [
+        gameId,
+        action,
+      ]);
 
-      const isGameOver = parsedEvents
-        .find((e) => e.eventType === WorldEvents.GameOver)
+      const isGameOver = parsedEvents.find((e) => e.eventType === WorldEvents.GameOver);
 
       const consequenceEvent = parsedEvents.find(
         (e) => e.eventType === WorldEvents.Consequence,
-      ) as ConsequenceEventData
+      ) as ConsequenceEventData;
 
       return {
         hash,
         isGameOver,
-        event: parsedEvents.find(
-          (e) => e.eventType === WorldEvents.Consequence,
-        ) as ConsequenceEventData,
-        events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.MarketEvent)
-          .map((e) => e as MarketEventData),
+        event: parsedEvents.find((e) => e.eventType === WorldEvents.Consequence) as ConsequenceEventData,
+        events: parsedEvents.filter((e) => e.eventType === WorldEvents.MarketEvent).map((e) => e as MarketEventData),
       };
     },
     [executeAndReceipt],
@@ -332,17 +328,14 @@ export const useSystems = (): SystemsInterface => {
 
   const buyItem = useCallback(
     async (gameId: string, itemId: ItemEnum) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::shop::shop",
-        "buy_item",
-        [gameId, itemId],
-      );
+      const { hash, events, parsedEvents } = await executeAndReceipt("rollyourown::systems::shop::shop", "buy_item", [
+        gameId,
+        itemId,
+      ]);
 
       return {
         hash,
-        events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.MarketEvent)
-          .map((e) => e as MarketEventData),
+        events: parsedEvents.filter((e) => e.eventType === WorldEvents.MarketEvent).map((e) => e as MarketEventData),
       };
     },
     [executeAndReceipt],
@@ -350,11 +343,10 @@ export const useSystems = (): SystemsInterface => {
 
   const dropItem = useCallback(
     async (gameId: string, itemId: ItemEnum) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::shop::shop",
-        "drop_item",
-        [gameId, itemId],
-      );
+      const { hash, events, parsedEvents } = await executeAndReceipt("rollyourown::systems::shop::shop", "drop_item", [
+        gameId,
+        itemId,
+      ]);
 
       return {
         hash,
@@ -365,40 +357,29 @@ export const useSystems = (): SystemsInterface => {
 
   const skipShop = useCallback(
     async (gameId: string) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::shop::shop",
-        "skip",
-        [gameId],
-      );
+      const { hash, events, parsedEvents } = await executeAndReceipt("rollyourown::systems::shop::shop", "skip", [
+        gameId,
+      ]);
 
       return {
         hash,
-        events: parsedEvents
-          .filter((e) => e.eventType === WorldEvents.MarketEvent)
-          .map((e) => e as MarketEventData),
+        events: parsedEvents.filter((e) => e.eventType === WorldEvents.MarketEvent).map((e) => e as MarketEventData),
       };
     },
     [executeAndReceipt],
   );
 
+  const failingTx = useCallback(async () => {
+    const { hash, events, parsedEvents } = await executeAndReceipt(
+      "rollyourown::systems::devtools::devtools",
+      "failing_tx",
+      [],
+    );
 
-
-
-  const failingTx = useCallback(
-    async () => {
-      const { hash, events, parsedEvents } = await executeAndReceipt(
-        "rollyourown::systems::devtools::devtools",
-        "failing_tx",
-        [],
-      );
-
-      return {
-        hash,
-      };
-    },
-    [executeAndReceipt],
-  );
-
+    return {
+      hash,
+    };
+  }, [executeAndReceipt]);
 
   // const setName = useCallback(
   //   async (gameId: string, playerName: string) => {
@@ -414,7 +395,6 @@ export const useSystems = (): SystemsInterface => {
   //   },
   //   [executeAndReceipt],
   // );
-
 
   return {
     createGame,

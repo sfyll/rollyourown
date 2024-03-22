@@ -64,10 +64,10 @@ export default function Travel() {
       return getLocationById(targetId)?.name;
     }
   }, [targetId]);
-  
+
   const { locationPrices } = useMarketPrices({
     gameId,
-    seismic
+    seismic,
   });
 
   useEffect(() => {
@@ -89,17 +89,16 @@ export default function Travel() {
           return {
             id: drug.id,
             price: drug.price,
-            hiding_price: drug.marketPool.quantity.toString().slice(0,5),
+            hiding_price: drug.marketPool.quantity.toString().slice(0, 5),
           } as MarketPriceInfo;
         }
         return {
           id: drug.id,
           price: drug.price,
-          hiding_price: drug.marketPool.quantity.toString().slice(0,5),
+          hiding_price: drug.marketPool.quantity.toString().slice(0, 5),
         } as MarketPriceInfo;
       });
     }
-
   }, [locationPrices, targetId, currentLocationId]);
 
   useEventListener("keydown", (e) => {
@@ -240,13 +239,25 @@ export default function Travel() {
       >
         <Inventory />
         <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
-        <LocationPrices prices={prices} isCurrentLocation={currentLocationId ? targetId === currentLocationId : true} currentLocationId={currentLocationId} />
+        <LocationPrices
+          prices={prices}
+          isCurrentLocation={currentLocationId ? targetId === currentLocationId : true}
+          currentLocationId={currentLocationId}
+        />
       </VStack>
     </Layout>
   );
 }
 
-const LocationPrices = ({ prices, isCurrentLocation, currentLocationId }: { prices: MarketPriceInfo[]; isCurrentLocation?: boolean ; currentLocationId?: string}) => {
+const LocationPrices = ({
+  prices,
+  isCurrentLocation,
+  currentLocationId,
+}: {
+  prices: MarketPriceInfo[];
+  isCurrentLocation?: boolean;
+  currentLocationId?: string;
+}) => {
   const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();
 
   return (
@@ -286,7 +297,9 @@ const LocationPrices = ({ prices, isCurrentLocation, currentLocationId }: { pric
                   {getDrugById(drug.id)?.icon({
                     boxSize: "24px",
                   })}
-                  <Text display={isCurrentLocation ? "block" : ["none", "block"]}>{isCurrentLocation && currentLocationId ? `$${drug.price.toFixed(0)}` : drug.hiding_price}</Text>
+                  <Text display={isCurrentLocation ? "block" : ["none", "block"]}>
+                    {isCurrentLocation && currentLocationId ? `$${drug.price.toFixed(0)}` : drug.hiding_price}
+                  </Text>
                   {drug.percentage && drug.diff && drug.diff !== 0 && (
                     <Text opacity="0.5" color={drug.diff >= 0 ? "neon.200" : "red"}>
                       ({!isPercentage ? `${drug.percentage.toFixed(0)}%` : formatCash(drug.diff)})

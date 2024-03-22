@@ -13,7 +13,11 @@ export default function Tooltip({
   title: string;
   text: string;
 }) {
-  return <ChakraTooltip  hasArrow label={<TooltipContent title={title} text={text} color={color} />}>{children}</ChakraTooltip>;
+  return (
+    <ChakraTooltip hasArrow label={<TooltipContent title={title} text={text} color={color} />}>
+      {children}
+    </ChakraTooltip>
+  );
 }
 
 const TooltipContent = ({ title, text, color }: { title: string; text: string; color: string }) => {
