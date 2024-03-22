@@ -19,4 +19,10 @@ name = "rollyourown"
 version = "0.1.0"
 dependencies = [
  "dojo",
+ "seismic",
 ]
+
+[[package]]
+name = "seismic"
+version = "0.1.0"
+source = "git+https://github.com/sfyll/pilot-ryo.git?rev=02dffe8#02dffe8e6535e77d5fdec899353b95145b992086"
