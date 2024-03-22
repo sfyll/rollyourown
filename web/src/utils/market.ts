@@ -30,32 +30,3 @@ export const calculateMaxQuantity = (market: Market, maxCash: number) => {
 
   return Math.floor(maxQuantity);
 };
-
-export const calculateNewMarketValuesAndDeltas = (
-  market: Market,
-  tradeAmount: number,
-  tradeDirection: TradeDirection,
-) => {
-  const k = market.cash * market.quantity;
-
-  let newQuantity: number, newCash: number;
-  if (tradeDirection === TradeDirection.Buy) {
-    newQuantity = market.quantity - tradeAmount; 
-  } else { 
-    newQuantity = market.quantity + tradeAmount; 
-  }
-  newCash = Math.round(k / newQuantity); 
-
-  const cashDelta = newCash - market.cash; 
-  const quantityDelta = newQuantity - market.quantity;
-
-  return {
-    newMarket: {
-      cash: newCash,
-      quantity: newQuantity,
-    },
-    cashDelta,
-    quantityDelta,
-  };
-};
-
