@@ -2028,7 +2028,7 @@
     {
       "name": "rollyourown::systems::trade::trade",
       "address": "0x37539cbd5f049814c1f0e7890e4b3acd656c4bbd45776c81f24014cf50cb0ef",
-      "class_hash": "0xc55edfec1f9654a586a1be43c6dc8f1b5b2c6bad8b9e1d5c19d9bbcc135432",
+      "class_hash": "0x78ca4be09aecf0eaa11c4e3b3c83604b57f3c3f3703be5b171dc64a65037994",
       "abi": [
         {
           "type": "impl",
@@ -2154,6 +2154,52 @@
           ]
         },
         {
+          "type": "struct",
+          "name": "core::integer::u256",
+          "members": [
+            {
+              "name": "low",
+              "type": "core::integer::u128"
+            },
+            {
+              "name": "high",
+              "type": "core::integer::u128"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::starknet::secp256_trait::Signature",
+          "members": [
+            {
+              "name": "r",
+              "type": "core::integer::u256"
+            },
+            {
+              "name": "s",
+              "type": "core::integer::u256"
+            },
+            {
+              "name": "y_parity",
+              "type": "core::bool"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "rollyourown::systems::trade::ITrade",
           "items": [
@@ -2176,6 +2222,30 @@
                 {
                   "name": "quantity",
                   "type": "core::integer::u32"
+                },
+                {
+                  "name": "cash",
+                  "type": "core::felt252"
+                },
+                {
+                  "name": "total_quantity",
+                  "type": "core::felt252"
+                },
+                {
+                  "name": "cost",
+                  "type": "core::integer::u128"
+                },
+                {
+                  "name": "seismic_contract_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "commitment",
+                  "type": "core::felt252"
+                },
+                {
+                  "name": "signature",
+                  "type": "core::starknet::secp256_trait::Signature"
                 }
               ],
               "outputs": [],
@@ -2200,6 +2270,30 @@
                 {
                   "name": "quantity",
                   "type": "core::integer::u32"
+                },
+                {
+                  "name": "cash",
+                  "type": "core::felt252"
+                },
+                {
+                  "name": "total_quantity",
+                  "type": "core::felt252"
+                },
+                {
+                  "name": "cost",
+                  "type": "core::integer::u128"
+                },
+                {
+                  "name": "seismic_contract_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "commitment",
+                  "type": "core::felt252"
+                },
+                {
+                  "name": "signature",
+                  "type": "core::starknet::secp256_trait::Signature"
                 }
               ],
               "outputs": [],
@@ -2276,12 +2370,12 @@
             },
             {
               "name": "quantity",
-              "type": "core::integer::u32",
+              "type": "core::felt252",
               "kind": "data"
             },
             {
-              "name": "cost",
-              "type": "core::integer::u128",
+              "name": "cash",
+              "type": "core::felt252",
               "kind": "data"
             }
           ]
@@ -2308,12 +2402,12 @@
             },
             {
               "name": "quantity",
-              "type": "core::integer::u32",
+              "type": "core::felt252",
               "kind": "data"
             },
             {
-              "name": "payout",
-              "type": "core::integer::u128",
+              "name": "cash",
+              "type": "core::felt252",
               "kind": "data"
             }
           ]
