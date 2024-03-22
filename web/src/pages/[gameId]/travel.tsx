@@ -83,9 +83,8 @@ export default function Travel() {
 
   const prices = useMemo(() => {
     if (locationPrices && targetId) {
-      const current = sortDrugMarkets(locationPrices.get(currentLocationId || ""));
       const target = sortDrugMarkets(locationPrices.get(targetId));
-      return target.map((drug, index) => {
+      return target.map((drug) => {
         if (currentLocationId) {
           return {
             id: drug.id,
