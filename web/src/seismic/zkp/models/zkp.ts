@@ -28,6 +28,10 @@ const verifyProof = async (signals: any, proof: any) => {
 export async function createAndVerifyProof(proofInput: ZkpParams): Promise<boolean> {
   try {
     const { proof, publicSignals } = await makeProof(proofInput);
+    console.log("== Proof verified");
+    console.log(`- ec points: ${JSON.stringify(proof)}`)
+    console.log(`- publicSignals: ${publicSignals}`)
+    console.log("==");
     const isValid = await verifyProof(publicSignals, proof);
     if (!isValid) {
       throw new Error("Proof verification failed.");
