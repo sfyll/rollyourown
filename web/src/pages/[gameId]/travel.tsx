@@ -259,6 +259,7 @@ const LocationPrices = ({
   currentLocationId?: string;
 }) => {
   const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();
+
   return (
     <VStack w="full">
       <HStack w="full" justify="space-between" color="neon.500" display={["none", "flex"]}>
