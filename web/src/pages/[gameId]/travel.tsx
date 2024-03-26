@@ -89,13 +89,13 @@ export default function Travel() {
           return {
             id: drug.id,
             price: drug.price,
-            hiding_price: drug.marketPool.quantity.toString().slice(0, 5),
+            hiding_price: "???",
           } as MarketPriceInfo;
         }
         return {
           id: drug.id,
           price: drug.price,
-          hiding_price: drug.marketPool.quantity.toString().slice(0, 5),
+          hiding_price: "???",
         } as MarketPriceInfo;
       });
     }
@@ -220,7 +220,7 @@ export default function Travel() {
           </Text>
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
-        <LocationPrices prices={prices} currentLocationId={currentLocationId} />
+        <LocationPrices prices={prices} isCurrentLocation={currentLocationId ? targetId === currentLocationId : true} currentLocationId={currentLocationId} />
       </VStack>
       <VStack
         display={["flex", "none"]}
@@ -259,7 +259,6 @@ const LocationPrices = ({
   currentLocationId?: string;
 }) => {
   const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();
-
   return (
     <VStack w="full">
       <HStack w="full" justify="space-between" color="neon.500" display={["none", "flex"]}>
