@@ -29,6 +29,7 @@ export default class Univ2 {
       throw new Error("Insufficient liquidity");
     }
     const numerator = this.reserve_in * amountOut;
+    console.log(this.reserve_out, amountOut);
     const denominator = this.reserve_out - amountOut;
     return (numerator + denominator - BigInt(1)) / denominator;
   }
