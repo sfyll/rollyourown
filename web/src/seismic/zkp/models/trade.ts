@@ -115,7 +115,6 @@ export default class Trade {
     amount: bigint,
     side: TradeSide = TradeSide.BUY,
   ): Promise<Trade> {
-    console.log(reserve_in, reserve_out, amount, side);
     if (side === TradeSide.BUY) {
       return Trade.getParametersBuy(reserve_in, reserve_out, amount);
     } else if (side === TradeSide.SELL) {
