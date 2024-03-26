@@ -107,7 +107,7 @@ export const useMarketPrices = ({
 
   useEffect(() => {
 
-    if (!isLoading && data && tradeParams) {
+    if (!isLoading && data) {
       const createdLocationPrices = MarketPrices.create(data?.blindedMarketModels?.edges as BlindedMarketEdge[], tradeParams);
       setLocationPrices(createdLocationPrices);
     }

@@ -1,14 +1,14 @@
 import { useCallback } from "react";
 import { useDojoContext } from "./useDojoContext";
 import { Action, Drug, GameMode, ShopItemInfo } from "../types";
-import { shortString, GetTransactionReceiptResponse, BigNumberish, SuccessfulTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse } from "starknet";
+import { shortString, GetTransactionReceiptResponse, BigNumberish, SuccessfulTransactionReceiptResponse, RejectedTransactionReceiptResponse, RevertedTransactionReceiptResponse, Signature, uint256 } from "starknet";
 import { getEvents } from "@dojoengine/utils";
 import { parseAllEvents, BaseEventData, JoinedEventData, MarketEventData, AdverseEventData, ConsequenceEventData, AtPawnshopEventData } from "../events";
 import { WorldEvents } from "../generated/contractEvents";
 import { Location, ItemEnum } from "../types";
 import { useState } from "react";
 import { useToast } from "@/hooks/toast";
-import { ShopItem } from "../queries/usePlayerEntity";
+import {  cairo, WeierstrassSignatureType } from "starknet";  
 
 export interface SystemsInterface {
   createGame: (
@@ -25,12 +25,24 @@ export interface SystemsInterface {
     locationId: Location,
     drugId: Drug,
     quantity: number,
+    cash: BigNumberish,
+    total_quantity: BigNumberish,
+    cost: BigNumberish,
+    seismic_contract_address: BigNumberish,
+    commitment: BigNumberish,
+    signature:  WeierstrassSignatureType, 
   ) => Promise<SystemExecuteResult>;
   sell: (
     gameId: string,
     locationId: Location,
     drugId: Drug,
     quantity: number,
+    cash: BigNumberish,
+    total_quantity: BigNumberish,
+    cost: BigNumberish,
+    seismic_contract_address: BigNumberish,
+    commitment: BigNumberish,
+    signature:  WeierstrassSignatureType, 
   ) => Promise<SystemExecuteResult>;
   // setName: (gameId: string, playerName: string) => Promise<SystemExecuteResult>;
   decide: (
@@ -106,7 +118,7 @@ export const useSystems = (): SystemsInterface => {
 
       setError(undefined)
       setIsPending(true)
-
+      
       let tx, receipt;
       try {
         tx = await dojoProvider.execute(account!, contract, system, callData);
@@ -242,12 +254,18 @@ export const useSystems = (): SystemsInterface => {
       locationId: Location,
       drugId: Drug,
       quantity: number,
+      cash: BigNumberish,
+      total_quantity: BigNumberish,
+      cost: BigNumberish,
+      seismic_contract_address: BigNumberish,
+      commitment: BigNumberish,
+      signature:  WeierstrassSignatureType, 
     ) => {
 
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::trade::trade",
         "buy",
-        [gameId, locationId, drugId, quantity],
+        [gameId, locationId, drugId, quantity, cash , total_quantity, cost, seismic_contract_address, commitment, {r:cairo.uint256(signature.r), s:cairo.uint256(signature.s), y_parity:signature.recovery!}],
       );
 
       return {
@@ -263,11 +281,17 @@ export const useSystems = (): SystemsInterface => {
       locationId: Location,
       drugId: Drug,
       quantity: number,
+      cash: BigNumberish,
+      total_quantity: BigNumberish,
+      cost: BigNumberish,
+      seismic_contract_address: BigNumberish,
+      commitment: BigNumberish,
+      signature:  WeierstrassSignatureType,
     ) => {
       const { hash, events, parsedEvents } = await executeAndReceipt(
         "rollyourown::systems::trade::trade",
         "sell",
-        [gameId, locationId, drugId, quantity],
+        [gameId, locationId, drugId, quantity, cash , total_quantity, cost, seismic_contract_address, commitment, {r:cairo.uint256(signature.r), s:cairo.uint256(signature.s), y_parity:signature.recovery!}],
       );
 
       return {
