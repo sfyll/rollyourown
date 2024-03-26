@@ -99,6 +99,7 @@ export default function Travel() {
         } as MarketPriceInfo;
       });
     }
+    return []
   }, [locationPrices, targetId, currentLocationId]);
 
   useEventListener("keydown", (e) => {
@@ -259,7 +260,7 @@ const LocationPrices = ({
   currentLocationId?: string;
 }) => {
   const { isOpen: isPercentage, onToggle: togglePercentage } = useDisclosure();
-
+  console.log(isCurrentLocation, currentLocationId)
   return (
     <VStack w="full">
       <HStack w="full" justify="space-between" color="neon.500" display={["none", "flex"]}>
