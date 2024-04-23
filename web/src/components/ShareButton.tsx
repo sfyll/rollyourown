@@ -18,7 +18,6 @@ const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
       href={`https://twitter.com/intent/tweet?text=${getShareText(playerEntity)}`}
       target="_blank"
       textDecoration="none !important"
-
       {...props}
     >
       <Button variant={props.variant ? props.variant : ""} w="full">

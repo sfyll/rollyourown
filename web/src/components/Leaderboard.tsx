@@ -30,7 +30,7 @@ import { Arrow, Skull } from "./icons";
 import { useRyoMetas } from "@/dojo/queries/useRyoMetas";
 import { useLeaderboardMetas } from "@/dojo/queries/useLeaderboardMetas";
 import Countdown from "react-countdown";
-import { profanity } from '@2toad/profanity';
+import { profanity } from "@2toad/profanity";
 
 const renderer = ({
   days,
@@ -49,10 +49,10 @@ const renderer = ({
     return <Text>RESETS NEXT GAME</Text>;
   } else {
     if (Number.isNaN(days)) {
-      days = 4
-      hours = 20
-      minutes = 4
-      seconds = 20
+      days = 4;
+      hours = 20;
+      minutes = 4;
+      seconds = 20;
     }
     return (
       <HStack textStyle="subheading" fontSize="12px">

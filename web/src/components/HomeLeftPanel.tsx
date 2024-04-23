@@ -46,30 +46,15 @@ const steps = [
   },
 ];
 
-const HomeStep = ({
-  step,
-}: {
-  step: { step: number; title: string; desc: string };
-}) => {
+const HomeStep = ({ step }: { step: { step: number; title: string; desc: string } }) => {
   return (
     <>
-      <HStack
-        flexDirection={step.step % 2 == 1 ? "row" : "row-reverse"}
-        gap="20px"
-      >
-        <Image
-          src={`/images/landing/step${step.step}.png`}
-          alt={`step${step.step}`}
-          w="42%"
-        />
+      <HStack flexDirection={step.step % 2 == 1 ? "row" : "row-reverse"} gap="20px">
+        <Image src={`/images/landing/step${step.step}.png`} alt={`step${step.step}`} w="42%" />
 
         <VStack w="58%" alignItems="flex-start" py="100px">
           <HStack>
-            <Image
-              src={`/images/landing/step${step.step}-icon.png`}
-              alt={`step${step.step}`}
-              w="92px"
-            />
+            <Image src={`/images/landing/step${step.step}-icon.png`} alt={`step${step.step}`} w="92px" />
             <VStack alignItems="flex-start">
               <Text
                 fontSize="11px"
@@ -79,11 +64,7 @@ const HomeStep = ({
               >
                 Step {step.step}
               </Text>
-              <Heading
-                fontFamily={"ppneuebit"}
-                fontSize="44px"
-                lineHeight={"1"}
-              >
+              <Heading fontFamily={"ppneuebit"} fontSize="44px" lineHeight={"1"}>
                 {step.title}
               </Heading>
             </VStack>
@@ -135,12 +116,7 @@ const HomeLeftPanel = () => {
         </VStack>
 
         <VStack position="relative" top="-160px" display={["none", "flex"]}>
-          <Image
-            src={"/images/landing/main.png"}
-            maxH="75vh"
-            display={["none", "block"]}
-            alt="context"
-          />
+          <Image src={"/images/landing/main.png"} maxH="75vh" display={["none", "block"]} alt="context" />
 
           <Box
             id="steps"
@@ -160,14 +136,7 @@ const HomeLeftPanel = () => {
           </Box>
 
           <HStack py="100px">
-            <Card
-              display="flex"
-              flexDirection="row"
-              p="2"
-              alignItems="center"
-              variant="pixelated"
-              px="5"
-            >
+            <Card display="flex" flexDirection="row" p="2" alignItems="center" variant="pixelated" px="5">
               <ChakraLink
                 href="https://cartridge.gg/"
                 target="_blank"

@@ -1,4 +1,3 @@
-
 import { useContext } from "react";
 import { DojoContext } from "../context/DojoContext";
 
@@ -8,5 +7,4 @@ export const useDojoContext = () => {
     throw new Error("useDojoContext must be used within a DojoProvider");
   }
   return value;
-}
-
+};

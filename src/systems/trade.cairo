@@ -37,11 +37,10 @@ trait ITrade<TContractState> {
 
 #[dojo::contract]
 mod trade {
-    use rollyourown::seismic::seismic::ISeismicDispatcherTrait;
-use rollyourown::seismic::seismic::ISeismicDispatcher;
+    use seismic::seismic::{ISeismicDispatcherTrait, ISeismicDispatcher};
     use starknet::ContractAddress;
     use starknet::get_caller_address;
-
+    use seismic::eip712_simple_struct::get_pool_params_commitment;
     use rollyourown::models::drug::{Drug, DrugEnum};
     use rollyourown::models::player::{Player, PlayerTrait};
     use rollyourown::models::location::{Location, LocationEnum};

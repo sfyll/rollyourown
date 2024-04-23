@@ -77,7 +77,6 @@ const Tutorial = ({ isOpen, close }: { isOpen: boolean; close: () => void }) => 
     burner: { create: createBurner, isDeploying: isBurnerDeploying },
   } = useDojoContext();
 
-
   const onNext = async () => {
     if (currentStep == steps.length) {
       if (!account) {
