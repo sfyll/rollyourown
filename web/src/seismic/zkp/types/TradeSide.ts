@@ -1,5 +1,4 @@
 export enum TradeSide {
-    BUY = "BUY",
-    SELL = "SELL"
+  BUY = "BUY",
+  SELL = "SELL",
 }
-

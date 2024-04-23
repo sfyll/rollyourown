@@ -4,21 +4,16 @@ import { useDojoContext } from "./useDojoContext";
 import { SystemExecuteResult } from "./useSystems";
 
 export interface SystemsInterface {
-  feedLeaderboard: (
-    count: number,
-  ) => Promise<SystemExecuteResult>;
+  feedLeaderboard: (count: number) => Promise<SystemExecuteResult>;
 
   // isPending: boolean;
   // error?: Error;
 }
 
-
 export const useDevtools = (): SystemsInterface => {
   const {
     masterAccount,
-    dojoProvider: {
-      execute
-    }
+    dojoProvider: { execute },
   } = useDojoContext();
 
   const executeAndReceipt = useCallback(
@@ -30,7 +25,6 @@ export const useDevtools = (): SystemsInterface => {
       hash: string;
       receipt: GetTransactionReceiptResponse;
     }> => {
-
       const tx = await execute(masterAccount, contract, system, callData);
       const receipt = await masterAccount.waitForTransaction(tx.transaction_hash, {
         retryInterval: 100,
@@ -38,7 +32,7 @@ export const useDevtools = (): SystemsInterface => {
 
       return {
         hash: tx.transaction_hash,
-        receipt
+        receipt,
       };
     },
     [execute, masterAccount],
@@ -46,21 +40,15 @@ export const useDevtools = (): SystemsInterface => {
 
   const feedLeaderboard = useCallback(
     async (count: number) => {
-      const { hash, receipt, } = await executeAndReceipt(
-        "devtools",
-        "feed_leaderboard",
-        [count],
-      );
+      const { hash, receipt } = await executeAndReceipt("devtools", "feed_leaderboard", [count]);
 
       return {
         hash,
-        receipt
+        receipt,
       };
     },
     [executeAndReceipt],
   );
-
-
 
   return {
     feedLeaderboard,

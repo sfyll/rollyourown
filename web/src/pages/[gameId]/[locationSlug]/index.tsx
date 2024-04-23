@@ -76,7 +76,7 @@ export default function Location() {
         <Footer>
           <Button
             w={["full", "auto"]}
-            px={["auto","20px"]}
+            px={["auto", "20px"]}
             isLoading={isPending}
             onClick={async () => {
               if (isLastDay) {

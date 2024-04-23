@@ -22,7 +22,6 @@ const mediaLibrary: MediaItem[] = [
   { name: "Gangsta's Paradise", filename: "C8_Gangsta_s Paradise.mp3" },
   { name: "I Got 5 On It", filename: "C9_I Got 5 On It.mp3" },
   { name: "Regulate", filename: "C10_Regulate.mp3" },
-
 ];
 
 export interface MediaState {

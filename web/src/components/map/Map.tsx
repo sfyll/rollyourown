@@ -68,14 +68,7 @@ export const Map = ({
         bottom: 300,
       }}
     >
-      <Image
-        src="/images/map/basemap.svg"
-        position="absolute"
-        top="0"
-        left="0"
-        boxSize="full"
-        alt="ryo map"
-      />
+      <Image src="/images/map/basemap.svg" position="absolute" top="0" left="0" boxSize="full" alt="ryo map" />
 
       <Outline target={target} current={current} />
       <HitBox onSelect={onSelect} />
