@@ -12,14 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React, { ReactNode, useEffect, useState } from "react";
 import { Note, Play, Pause, Backward, Forward } from "./icons";
-import {
-  initMediaStore,
-  play,
-  pause,
-  useMediaStore,
-  backward,
-  forward,
-} from "@/hooks/media";
+import { initMediaStore, play, pause, useMediaStore, backward, forward } from "@/hooks/media";
 import { generatePixelBorderPath } from "@/utils/ui";
 
 const slideAnim = keyframes`  
@@ -62,8 +55,7 @@ const ClickFeedback = ({
 
 const MediaPlayer = ({ ...props }: StyleProps) => {
   const mediaStore = useMediaStore();
-  const songTitle =
-    mediaStore.medias[mediaStore.currentIndex]?.name || "LOADING ...";
+  const songTitle = mediaStore.medias[mediaStore.currentIndex]?.name || "LOADING ...";
   const height = "48px";
 
   useEffect(() => {
@@ -79,9 +71,7 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
       h={height}
       direction={{ base: "row", md: "column" }}
       alignItems="normal"
-      className={
-        mediaStore.isPlaying ? "mediaplayer-playing" : "mediaplayer-paused"
-      }
+      className={mediaStore.isPlaying ? "mediaplayer-playing" : "mediaplayer-paused"}
       borderRadius={6}
       bg={{ md: "neon.700" }}
       overflow="hidden"
@@ -122,26 +112,11 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
           <Note m={1} />
         </Box>
 
-        <Flex
-          direction="row"
-          overflow="hidden"
-          whiteSpace="nowrap"
-          userSelect="none"
-        >
-          <Box
-            position="relative"
-            pl={6}
-            animation={`${slideAnim} infinite 8s linear`}
-            willChange="transform"
-          >
+        <Flex direction="row" overflow="hidden" whiteSpace="nowrap" userSelect="none">
+          <Box position="relative" pl={6} animation={`${slideAnim} infinite 8s linear`} willChange="transform">
             {songTitle}
           </Box>
-          <Box
-            position="relative"
-            pl={6}
-            animation={`${slideAnim} infinite 8s linear`}
-            willChange="transform"
-          >
+          <Box position="relative" pl={6} animation={`${slideAnim} infinite 8s linear`} willChange="transform">
             {songTitle}
           </Box>
         </Flex>
@@ -161,13 +136,7 @@ const MediaPlayer = ({ ...props }: StyleProps) => {
             <Backward onClick={backward} />
           </ClickFeedback>
 
-          <ClickFeedback>
-            {mediaStore.isPlaying ? (
-              <Pause onClick={pause} />
-            ) : (
-              <Play onClick={play} />
-            )}
-          </ClickFeedback>
+          <ClickFeedback>{mediaStore.isPlaying ? <Pause onClick={pause} /> : <Play onClick={play} />}</ClickFeedback>
 
           <ClickFeedback>
             <Forward onClick={forward} />

@@ -1,20 +1,6 @@
-import {
-  Brooklyn,
-  CentralPark,
-  ConeyIsland,
-  Manhattan,
-  Queens,
-  Bronx,
-} from "@/components/icons/locations";
+import { Brooklyn, CentralPark, ConeyIsland, Manhattan, Queens, Bronx } from "@/components/icons/locations";
 
-import {
-  Ludes,
-  Weed,
-  Acid,
-  Speed,
-  Heroin,
-  Cocaine,
-} from "@/components/icons/drugs";
+import { Ludes, Weed, Acid, Speed, Heroin, Cocaine } from "@/components/icons/drugs";
 
 import {
   Action,
@@ -28,7 +14,7 @@ import {
   Outcome,
   OutcomeInfo,
   PlayerStatus,
-  ShopItemInfo
+  ShopItemInfo,
 } from "./types";
 import { getMuggerResponses, getCopResponses } from "@/responses";
 
@@ -149,8 +135,7 @@ export const outcomes: OutcomeInfo[] = [
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/events/paid.png",
     description: "You paid the cop off",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Paid, isInitial),
+    getResponse: (isInitial: boolean) => getCopResponses(Outcome.Paid, isInitial),
     color: "yellow.400",
   },
   {
@@ -160,8 +145,7 @@ export const outcomes: OutcomeInfo[] = [
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/events/paid.png",
     description: "You paid the gang off",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Paid, isInitial),
+    getResponse: (isInitial: boolean) => getMuggerResponses(Outcome.Paid, isInitial),
     color: "neon.200",
   },
   {
@@ -170,8 +154,7 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Escaped,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/events/escaped.png",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Escaped, isInitial),
+    getResponse: (isInitial: boolean) => getCopResponses(Outcome.Escaped, isInitial),
     description: "You fled to a random location",
     color: "neon.200",
   },
@@ -181,8 +164,7 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Escaped,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/events/escaped.png",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Escaped, isInitial),
+    getResponse: (isInitial: boolean) => getMuggerResponses(Outcome.Escaped, isInitial),
     description: "You fled to a random location",
     color: "neon.200",
   },
@@ -192,8 +174,7 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Died,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/events/fought.png",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Died, isInitial),
+    getResponse: (isInitial: boolean) => getCopResponses(Outcome.Died, isInitial),
     color: "red",
   },
   {
@@ -202,8 +183,7 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Died,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/events/fought.png",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Died, isInitial),
+    getResponse: (isInitial: boolean) => getMuggerResponses(Outcome.Died, isInitial),
     color: "red",
   },
   {
@@ -212,8 +192,7 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Victorious,
     status: PlayerStatus.BeingArrested,
     imageSrc: "/images/events/victorious.png",
-    getResponse: (isInitial: boolean) =>
-      getCopResponses(Outcome.Victorious, isInitial),
+    getResponse: (isInitial: boolean) => getCopResponses(Outcome.Victorious, isInitial),
     color: "neon.200",
   },
   {
@@ -222,18 +201,13 @@ export const outcomes: OutcomeInfo[] = [
     type: Outcome.Victorious,
     status: PlayerStatus.BeingMugged,
     imageSrc: "/images/events/victorious.png",
-    getResponse: (isInitial: boolean) =>
-      getMuggerResponses(Outcome.Victorious, isInitial),
+    getResponse: (isInitial: boolean) => getMuggerResponses(Outcome.Victorious, isInitial),
     color: "neon.200",
   },
-
-
 ];
 
-
-
 export const shopItemInfos: ShopItemInfo[] = [
-  // attack 
+  // attack
   {
     id: ItemTextEnum.Attack,
     typeText: ItemTextEnum.Attack,
@@ -265,7 +239,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     cost: 0,
   },
 
-  // transport 
+  // transport
   {
     id: ItemTextEnum.Transport,
     typeText: ItemTextEnum.Transport,
@@ -297,7 +271,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     cost: 0,
   },
 
-  // defense 
+  // defense
   {
     id: ItemTextEnum.Defense,
     typeText: ItemTextEnum.Defense,
@@ -328,7 +302,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     name: "Kevlar",
     cost: 0,
   },
-  // speed 
+  // speed
   {
     id: ItemTextEnum.Speed,
     typeText: ItemTextEnum.Speed,
@@ -359,7 +333,7 @@ export const shopItemInfos: ShopItemInfo[] = [
     name: "Bicycle",
     cost: 0,
   },
-]
+];
 
 function findBy<T>(array: T[], key: keyof T, value: any): T | undefined {
   return array.find((item) => item[key] === value);
@@ -390,17 +364,17 @@ export function getDrugByType(type: Drug) {
 }
 
 export function getShopItem(id: ItemTextEnum, level: number): ShopItemInfo {
-  const item = shopItemInfos.find(i => i.id === id && i.level === level);
+  const item = shopItemInfos.find((i) => i.id === id && i.level === level);
   if (!item) {
-    throw Error('item not found!');
+    throw Error("item not found!");
   }
   return item;
 }
 
 export function getShopItemByType(type: ItemEnum, level: number): ShopItemInfo {
-  const item = shopItemInfos.find(i => i.type == type && i.level === level);
+  const item = shopItemInfos.find((i) => i.type == type && i.level === level);
   if (!item) {
-    throw Error('item not found!');
+    throw Error("item not found!");
   }
   return item;
 }
@@ -414,10 +388,9 @@ export function getActionName(action: Action): string {
     case Action.Run:
       return "Run";
     default:
-      return "?"
+      return "?";
   }
 }
-
 
 export function getOutcomeName(outcome: Outcome): string {
   switch (outcome) {
@@ -432,30 +405,26 @@ export function getOutcomeName(outcome: Outcome): string {
     case Outcome.Victorious:
       return "Victorious";
     default:
-      return  "?"
+      return "?";
   }
 }
-
 
 export function getShopItemStatname(typ: ItemTextEnum): string {
   switch (typ) {
     case ItemTextEnum.Attack:
-      return "ATK"
+      return "ATK";
     case ItemTextEnum.Defense:
-      return "DEF"
+      return "DEF";
     case ItemTextEnum.Transport:
-      return "INV"
+      return "INV";
     case ItemTextEnum.Speed:
-      return "SPD"
+      return "SPD";
     default:
-      return "?"
+      return "?";
   }
 }
 
-export function getOutcomeInfo(
-  status: PlayerStatus,
-  type: Outcome,
-): OutcomeInfo {
+export function getOutcomeInfo(status: PlayerStatus, type: Outcome): OutcomeInfo {
   const found = outcomes.find((item) => {
     return item.status === status && item.type === type;
   });
@@ -470,7 +439,5 @@ export function sortDrugMarkets(drugMarkets?: DrugMarketBlinded[]): DrugMarketBl
     return [];
   }
 
-  return drugMarkets.sort((a, b) => Number(a.type) - Number(b.type))
+  return drugMarkets.sort((a, b) => Number(a.type) - Number(b.type));
 }
-
-

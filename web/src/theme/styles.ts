@@ -15,12 +15,11 @@ export const styles = {
       color: "neon.200",
       letterSpacing: "0.04em",
       WebkitTapHighlightColor: "transparent",
-      "scrollbar-width": "none"
+      "scrollbar-width": "none",
     },
     "&::-webkit-scrollbar": {
       display: "none",
     },
-    
   },
 };
 
@@ -108,10 +107,11 @@ export const headerStyles = {
   borderImageSource: [
     `url("data:image/svg+xml,${PixelatedBorderImage({
       color: colors.neon["700"].toString(),
-    })}")`, 'none'
+    })}")`,
+    "none",
   ],
   clipPath: ["none", `polygon(${generatePixelBorderPath()})`],
-}
+};
 
 export const headerButtonStyles = {
   ...headerStyles,
@@ -120,10 +120,11 @@ export const headerButtonStyles = {
     borderImageSource: [
       `url("data:image/svg+xml,${PixelatedBorderImage({
         color: colors.neon["600"].toString(),
-      })}")`, 'none'
-    ]
+      })}")`,
+      "none",
+    ],
   },
-}
+};
 
 //layer styles
 export const layerStyles = {

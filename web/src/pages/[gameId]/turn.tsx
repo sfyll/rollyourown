@@ -6,13 +6,7 @@ import { getDrugByType, getLocationById, getOutcomeInfo } from "@/dojo/helpers";
 import { TradeDirection, usePlayerStore } from "@/hooks/state";
 import { useSystems } from "@/dojo/hooks/useSystems";
 
-import {
-  HStack,
-  ListItem,
-  Text,
-  UnorderedList,
-  VStack,
-} from "@chakra-ui/react";
+import { HStack, ListItem, Text, UnorderedList, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import Button from "@/components/Button";
 import { useEffect, useState } from "react";
@@ -24,16 +18,13 @@ export default function Turn() {
   const router = useRouter();
   const gameId = router.query.gameId as string;
   const { account, playerEntityStore } = useDojoContext();
- 
-  const { playerEntity } = playerEntityStore
+
+  const { playerEntity } = playerEntityStore;
 
   const { availableShopItems } = useAvailableShopItems(gameId);
   const { trades, lastEncounter, resetTurn } = usePlayerStore();
 
-  if (
-    !playerEntity ||
-    playerEntity.turn === playerEntity.maxTurns
-  ) {
+  if (!playerEntity || playerEntity.turn === playerEntity.maxTurns) {
     return <></>;
   }
 
@@ -48,17 +39,10 @@ export default function Turn() {
       <VStack w="full" my={["none", "auto"]}>
         {trades.size > 0 && (
           <VStack w="full">
-            <Product
-              product="Product"
-              quantity="Qty"
-              total="Value"
-              icon={undefined}
-              isHeader
-            />
+            <Product product="Product" quantity="Qty" total="Value" icon={undefined} isHeader />
             <UnorderedList w="full" variant="underline">
               {Array.from(trades).map(([drug, trade]) => {
-                const change =
-                  trade.direction === TradeDirection.Buy ? "+" : "-";
+                const change = trade.direction === TradeDirection.Buy ? "+" : "-";
                 const drugInfo = getDrugByType(drug)!;
                 return (
                   <ListItem key={drug}>
@@ -87,31 +71,12 @@ export default function Turn() {
             </ListItem>
             {lastEncounter && (
               <ListItem>
-                <HStack
-                  color={
-                    getOutcomeInfo(lastEncounter.status, lastEncounter.outcome)
-                      .color
-                  }
-                >
+                <HStack color={getOutcomeInfo(lastEncounter.status, lastEncounter.outcome).color}>
                   <HStack flex="1">
                     <Event />
-                    <Text>
-                      {
-                        getOutcomeInfo(
-                          lastEncounter.status,
-                          lastEncounter.outcome,
-                        ).name
-                      }
-                    </Text>
+                    <Text>{getOutcomeInfo(lastEncounter.status, lastEncounter.outcome).name}</Text>
                   </HStack>
-                  <Text flex="1">
-                    {
-                      getOutcomeInfo(
-                        lastEncounter.status,
-                        lastEncounter.outcome,
-                      ).description
-                    }
-                  </Text>
+                  <Text flex="1">{getOutcomeInfo(lastEncounter.status, lastEncounter.outcome).description}</Text>
                 </HStack>
               </ListItem>
             )}
@@ -125,14 +90,12 @@ export default function Turn() {
                   onClick={() => {
                     router.push(`/${gameId}/pawnshop`);
                   }}
-                  px={["auto","20px"]}
+                  px={["auto", "20px"]}
                   h="100px"
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  leftIcon={
-                    <Image src="/images/pawnshop.png" width={60} height={60} alt="pawnshop"/>
-                  }
+                  leftIcon={<Image src="/images/pawnshop.png" width={60} height={60} alt="pawnshop" />}
                 >
                   <Text>Visit Pawnshop</Text>
                 </Button>
@@ -141,14 +104,10 @@ export default function Turn() {
             <HStack gap="20px">
               <Button
                 w={["full", "auto"]}
-                px={["auto","20px"]}
+                px={["auto", "20px"]}
                 onClick={() => {
                   resetTurn();
-                  router.push(
-                    `/${gameId}/${
-                      getLocationById(playerEntity.locationId)?.slug
-                    }`,
-                  );
+                  router.push(`/${gameId}/${getLocationById(playerEntity.locationId)?.slug}`);
                 }}
               >
                 Continue

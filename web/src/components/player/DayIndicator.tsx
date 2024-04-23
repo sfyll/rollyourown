@@ -5,12 +5,9 @@ import { Calendar } from "../icons/archive";
 
 const DayIndicator = ({ day, ...props }: { day: number } & StyleProps) => {
   return (
-      <HStack
-      
-        {...props}
-      >
-        <Calendar /> <Text>{day}</Text>
-      </HStack>
+    <HStack {...props}>
+      <Calendar /> <Text>{day}</Text>
+    </HStack>
   );
 };
 

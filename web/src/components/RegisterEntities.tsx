@@ -2,30 +2,24 @@ import { useDojoContext } from "@/dojo/hooks/useDojoContext";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
- const RegisterEntities = () => {
-    const router = useRouter();
-    const gameId = router.query.gameId as string;
+const RegisterEntities = () => {
+  const router = useRouter();
+  const gameId = router.query.gameId as string;
 
-    const { account, playerEntityStore} = useDojoContext()
+  const { account, playerEntityStore } = useDojoContext();
 
-    useEffect(()=> {
-        if( playerEntityStore && gameId && account?.address){
-          console.log('Register PlayerEntity')
-          playerEntityStore.initPlayerEntity(gameId, account?.address);
-        }
+  useEffect(() => {
+    if (playerEntityStore && gameId && account?.address) {
+      console.log("Register PlayerEntity");
+      playerEntityStore.initPlayerEntity(gameId, account?.address);
+    }
 
-        if(!gameId){
-          playerEntityStore.reset();
-        }
-      }, [gameId, account?.address/*, playerEntityStore*/])
+    if (!gameId) {
+      playerEntityStore.reset();
+    }
+  }, [gameId, account?.address /*, playerEntityStore*/]);
 
-
-    return (<></>)
-    
+  return <></>;
 };
 
-  export default RegisterEntities; 
-
-
-
-
+export default RegisterEntities;
